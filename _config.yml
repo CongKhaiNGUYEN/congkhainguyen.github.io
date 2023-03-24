@@ -16,12 +16,12 @@ lang: en
 prefer_datetime_locale:
 
 # Change to your timezone › http://www.timezoneconverter.com/cgi-bin/findzone/findzone
-timezone: Europe/Madrid
+timezone: Europe/Paris
 
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: Zeropio's Blog                          # the main title
+title: Kaiba_404's Blog                          # the main title
 
 tagline: CyberSec Student   # it will display as the sub-title
 
@@ -29,23 +29,23 @@ description: >-                        # used by seo meta and the atom feed
   Personal blog, for writeups, own documentation and stuff.
 
 # fill in the protocol & hostname for your site, e.g., 'https://username.github.io'
-url: 'zeropio.github.io'
+url: 'congkhainguyen.github.io'
 
 github:
-  username: zeropio             # change to your github username
+  username: CongKhaiNGUYEN             # change to your github username
 
 twitter:
-  username: ZeropioWasTaken            # change to your twitter username
+  username: giangkhail12999            # change to your twitter username
 
 social:
   # Change to your full name.
   # It will be displayed as the default author of the posts and the copyright owner in the Footer
-  name: zeropio
-  email: zeropio@pm.me            # change to your email address
+  name: Cong Khai NGUYEN
+  email: cong_khai.nguyen@insa-cvl.fr            # change to your email address
   links:
     # The first element serves as the copyright owner's link
-    - https://twitter.com/zeropiowastaken      # change to your twitter homepage
-    - https://github.com/zeropio       # change to your github homepage
+    - https://twitter.com/giangkhail12999     # change to your twitter homepage
+    - https://github.com/CongKhaiNGUYEN      # change to your github homepage
     # Uncomment below to add more social links
     # - https://www.facebook.com/username
     # - https://www.linkedin.com/in/username
@@ -83,7 +83,7 @@ theme_mode: dark  # [light|dark]
 img_cdn:
 
 # the avatar on sidebar, support local or CORS resources
-avatar: /assets/img/icon.png
+avatar: /assets/img/icon.jpg
 
 # boolean type, the global switch for ToC in posts.
 toc: true
