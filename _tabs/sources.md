@@ -73,7 +73,6 @@ icon: fa fa-globe
 | [robtex](https://www.robtex.com/) | DNS information |
 | [reverseip](https://viewdns.info/reverseip/) | Reverse IP information |
 | **Dorks** |
-| [Search operators](https://drive.google.com/file/d/1GIfRKE0ctkOoqnc2lwGzYu5rh88T4hs8/view) | Spanish dorks examples |
 | [Shodan](https://www.shodan.io/) | Major IP search |
 | **Other** |
 | [Have I been pwned](https://haveibeenpwned.com/) | Check if your email has been in a data leak |
@@ -114,7 +113,7 @@ icon: fa fa-globe
 | [Juice Shop](https://github.com/juice-shop/juice-shop) | OWASP challenges |
 | [CTF Challenge](https://ctfchallenge.com/) | CTFs challenges |
 | **Other** |
-| [Hackrocks](https://hackrocks.com/) | Spanish page for learn |
+| [Dreamhack](https://dreamhack.io/) | Korean page for learn |
 
 ---
 
