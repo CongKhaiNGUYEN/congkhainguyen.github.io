@@ -4,7 +4,7 @@ author: Kaiba_404
 date: 2023-03-30
 categories: [CTFs, HackDay2023, Trusted]
 tags: [CTF, HackDay2023, Cryptography]
-permalink: /CTFs/Hackday2023/Cryptography/Trusted
+permalink: /CTFs/HackDay2023/Cryptography/Trusted
 ---
 
 # Trusted
