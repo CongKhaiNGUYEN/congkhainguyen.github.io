@@ -1,8 +1,8 @@
 ---
-title: CTFs | 404CTF2023 | JeVeuxLaLune
+title: CTFs | 404CTF2023 | Je Veux La Lune
 author: Kaiba_404
 date: 2023-06-07
-categories: [CTFs, 404CTF2023, JeVeuxLaLune]
+categories: [CTFs, 404CTF2023, Je Veux La Lune]
 tags: [CTF, 404CTF2023, pwn]
 permalink: /CTFs/404CTF2023/pwn/jeveuxlalune
 ---
