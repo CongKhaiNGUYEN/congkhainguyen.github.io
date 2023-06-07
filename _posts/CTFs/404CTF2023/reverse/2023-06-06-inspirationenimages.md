@@ -22,7 +22,7 @@ As the challenge mentioned, we just need to find the parameters corresponding to
 
 After conducting some research on Google, I discovered that this binary file utilizes the GLFW engine for its images and animations. As a result, I can explore the GLFW documentation to identify the function responsible for modifying the background color. I can then search for this function within Ghidra to locate the corresponding parameter for the color of the background.
 
-After conducting further research in the GLFW documentation, I found that the function glClearColor() can be used to change the background color. Therefore, I have decided to search for this function within Ghidra to locate its implementation and relevant parameters.
+After some further searching in the GLFW documentation, I found that the function glClearColor() can be used to change the background color. Therefore, I have decided to search for this function within Ghidra to locate its implementation and relevant parameters.
 
 ![glClearColor_search](https://github.com/CongKhaiNGUYEN/CTF/assets/61443497/f2d770da-3705-4459-9432-f1fc9963fbeb)
 
