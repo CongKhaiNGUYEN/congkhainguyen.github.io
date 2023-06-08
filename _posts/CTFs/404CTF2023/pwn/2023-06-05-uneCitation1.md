@@ -1,8 +1,8 @@
 ---
-title: CTFs | 404CTF2023 | Une Citation
+title: CTFs | 404CTF2023 | PWN | Une Citation
 author: Kaiba_404
 date: 2023-06-05
-categories: [CTFs, 404CTF2023, Une Citation1]
+categories: [CTFs, 404CTF2023, PWN]
 tags: [CTF, 404CTF2023, pwn]
 permalink: /CTFs/404CTF2023/pwn/uneCitation1
 ---

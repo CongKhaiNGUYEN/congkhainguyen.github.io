@@ -1,8 +1,8 @@
 ---
-title: CTFs | 404CTF2023 | Tour De Magique
+title: CTFs | 404CTF2023 | PWN | Tour De Magique
 author: Kaiba_404
 date: 2023-06-05
-categories: [CTFs, 404CTF2023, Tour De Magique]
+categories: [CTFs, 404CTF2023, PWN]
 tags: [CTF, 404CTF2023, pwn]
 permalink: /CTFs/404CTF2023/pwn/tourdemagique
 ---

@@ -1,8 +1,8 @@
 ---
-title: CTFs | 404CTF2023 | ASCON Marchombre
+title: CTFs | 404CTF2023 | Cryptography | ASCON Marchombre
 author: Kaiba_404
 date: 2023-06-07
-categories: [CTFs, 404CTF2023, ASCON Marchombre]
+categories: [CTFs, 404CTF2023, Cryptography]
 tags: [CTF, 404CTF2023, Cryptography]
 permalink: /CTFs/404CTF2023/Cryptography/ASCONMarchombre
 ---

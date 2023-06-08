@@ -1,9 +1,9 @@
 ---
-title: CTFs | 404CTF2023 | Cache Cache Le Retour
+title: CTFs | 404CTF2023 | PWN | Cache Cache Le Retour
 author: Kaiba_404
 date: 2023-06-05
-categories: [CTFs, 404CTF2023, Cache Cache Le Retour]
-tags: [CTF, 404CTF2023, pwn]
+categories: [CTFs, 404CTF2023, PWN]
+tags: [CTF, 404CTF2023, PWN]
 permalink: /CTFs/404CTF2023/pwn/cachecacheleretour
 ---
 
