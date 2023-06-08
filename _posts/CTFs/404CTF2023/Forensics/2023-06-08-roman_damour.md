@@ -1,7 +1,7 @@
 ---
 title: CTFs | 404CTF2023 | Forensics | Le Mystère du roman d'amour
 author: Kaiba_404
-date: 2023-06-05
+date: 2023-06-08
 categories: [CTFs, 404CTF2023, Forensics]
 tags: [CTF, 404CTF2023, Forensics]
 permalink: /CTFs/404CTF2023/Forensics/roman_damour
