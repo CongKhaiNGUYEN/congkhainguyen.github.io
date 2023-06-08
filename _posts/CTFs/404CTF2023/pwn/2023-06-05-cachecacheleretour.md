@@ -38,7 +38,7 @@ From the code, it is evident that the password is randomly generated each time t
 
 Understanding this, we can recreate the password generation process by using the same binary file and providing a seed based on future timestamps, such as the next 30 seconds or more. By generating the password using this approach, we can then attempt to "brute force" the server's password by trying the generated passwords every second until we succeed.
 
-The code below will have us to get the generated password by using gdb script:
+The code below will help us to get the generated password by using gdb script:
 
 ```shell
 set disassembly-flavor intel
@@ -99,7 +99,7 @@ while True:
     # p = remote("challenges.404ctf.fr",31725)
 
 
-    password = b'vE79ekVZPFpz7JTyW8EZ'
+    password = b'[FG/9y>frk}>G18bcac['
 
     p.recvuntil(b"mot de passe ?\n")
     p.sendline(password)
@@ -141,7 +141,7 @@ while True:
     p = remote("challenges.404ctf.fr",31725)
 
 
-    password = b'vE79ekVZPFpz7JTyW8EZ'
+    password = b'[FG/9y>frk}>G18bcac['
 
     p.recvuntil(b"mot de passe ?\n")
     p.sendline(password)
