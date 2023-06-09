@@ -8,8 +8,14 @@
   icon: 'fas fa-cube'
   url: 'https://app.hackthebox.com/profile/700925'
 -
-  type: twitter
-  icon: 'fab fa-twitter'
+-
+  type: tryhackme
+  icon: 'fas fa-cloud'
+  url: 'https://tryhackme.com/p/TTSiWOOD'  
+-
+  type: rootme
+  icon: 'fas fa-skull'
+  url: 'https://www.root-me.org/TTSiWOOD' 
 # -
 #   type: email
 #   icon: 'fas fa-envelope'

@@ -14,6 +14,10 @@ icon: fa fa-user
         <img src="https://img.shields.io/badge/HackTheBox-green?style=for-the-badge&logo=hackthebox&logoColor=black"
           alt="HackTheBox Badge" />
       </a>
+      <a href="https://tryhackme.com/p/TTSiWOOD" target="_blank">
+        <img src="https://img.shields.io/badge/tryhackme-pink?style=for-the-badge&logo=tryhackme&logoColor=red"
+          alt="TryHackMe Badge" />
+      </a>
       <!-- &nbsp;&nbsp;&nbsp;
       <a href="mailto: zeropio@pm.me">
         <img src="https://img.shields.io/badge/ProtonMail-8B89CC?style=for-the-badge&logo=protonmail&logoColor=white"
