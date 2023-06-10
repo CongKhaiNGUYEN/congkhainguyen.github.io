@@ -12,7 +12,8 @@ permalink: /CTFs/404CTF2023/pwn/uneCitation1
 
 ![citation_image](https://github.com/CongKhaiNGUYEN/CTF/assets/61443497/3b495da1-5e75-451e-adfb-e29bac5415e9)
 
-> /bin n'est pas monté sur la machine à distance.
+> we should pay attention to the line `/bin n'est pas monté sur la machine à distance.` in the description. Because it is an important thing for us to avoid wasting time
+{: .prompt-info}
 
 We have only one file for this challenge [une_citation_pas_comme_les_autres_1_2](https://github.com/CongKhaiNGUYEN/congkhainguyen.github.io/tree/main/_posts/CTFs/404CTF2023/pwn/files/une_citation_pas_comme_les_autres_1_2).
 
@@ -38,6 +39,9 @@ une_citation_pas_comme_les_autres_1_2: ELF 64-bit LSB executable, x86-64, versio
     NX:       NX enabled
     PIE:      No PIE (0x400000)
 ```
+
+From the provided commands output, we can gather some interesting information about the file. It is identified as an "ELF 64-bit" file and it appears to be "not stripped". It's protected by `NX` (We can't run the shellcode by injecting it into the stack) and `Canary found` (That is to say that this file has canary in the stack when executing). `No PIE`  the binary does not have PIE enabled, and its base address is fixed at 0x400000.
+
 
 Based on the information provided, it appears that certain exploitation methods can be eliminated based on the characteristics of the binary file:
 
@@ -230,7 +234,7 @@ So when we use the function
 
 because offset(int) is the offset of the first formatter we control, so our command will be
 
-`fmtstr_payload(6, writes, write_size='byte')`
+`fmtstr_payload(6, writes, write_size='byte')` (`numbwritten` is optional)
 
 ### Attack Plan
 

@@ -26,6 +26,12 @@ checksec cache_cache_le_retour
 
 ```
 
+> From the output of `file cache_cache_le_retour` we can see that this binary is a dynamically linked ELF-64 x86-64 bit LSB and it is stripped
+{: .prompt-info}
+
+> The output of `checksec cache_cache_le_retour` indicates that the cache_cache_le_retour binary has strong security features enabled, including full RELRO, a stack canary, NX protection, and PIE. These features help mitigate common security vulnerabilities and make it more difficult for attackers to exploit the binary.
+
+## Reverse engineering
 Use Ghidra to read the code. Since the binary file has been stripped, it may be challenging to comprehend the code. As a solution, I decided to rename some functions to enhance the code's readability. The modified function names are displayed in the image below.
 
 ![func_name_chache](https://github.com/CongKhaiNGUYEN/CTF/assets/61443497/43956ad6-eb89-45fa-86f0-7ad970e0391e)
@@ -42,20 +48,23 @@ The code below will help us to get the generated password by using gdb script:
 
 ```shell
 set disassembly-flavor intel
-
-break *0x5555554016a5 # just before the srand() function
+# add break point at address 0x5555554016a5 (just before the srand() function) to change the seed of the random
+break *0x5555554016a5
 commands
     silent
     print($rax)
-    set $rax += 33 # add 33s into the current timestamps
+    # because we need the password for the next 33s, so we inscrease current value of rax (in this case it's current timestamp) by 33
+    set $rax += 33
     print($rax)
     continue
 end
-
-break *0x5555554016ff # just after the loop which generated the password
+# adding a new break point just before the instructions that will generate the password
+break *0x5555554016ff
 commands
     silent
-    set $pass = (char *) $rbp -0x40 # get the password in the memory
+    # get the password in to $pass variable
+    set $pass = (char *) $rbp -0x40
+    # print the password to screen
     print($pass)
     quit
 end
@@ -98,7 +107,7 @@ while True:
     p = process("./cache_cache_le_retour")
     # p = remote("challenges.404ctf.fr",31725)
 
-
+    # the password of the next 33s seconds
     password = b'[FG/9y>frk}>G18bcac['
 
     p.recvuntil(b"mot de passe ?\n")
@@ -110,13 +119,17 @@ while True:
 p.interactive()
 ```
 
-After successful with password, the program will call `give_a_gift` function (name given by me) as shown below
+After finding the password, the program will call give_a_gift function (name that i set) as shown below
 
 ![give_a_gift](https://github.com/CongKhaiNGUYEN/CTF/assets/61443497/deab306f-6332-421b-bfc7-6965bb4278af)
 
-This function takes a base64-encoded string as input and saves it as a file named "mystere.zip". Subsequently, it extracts the contents of this file to access the "surprise.txt" file. This indicates that we may be able to exploit the functionality by using symlinks within the "surprise.txt" file, allowing us to read the contents of arbitrary files after uploading them to the server.
+This function takes a base64-encoded string as input then decode it after that it saves the decoded into a file named `mystere.zip` (It's a way to copy the file mystere.zip from our local machine to the server using `base64-encode-and-decode` ). Subsequently, it extracts the contents of this file to access the `surprise.txt` file. This indicates that we may be able to exploit the functionality by using symlinks within the `surprise.txt` file, allowing us to read the contents of arbitrary files after uploading them to the server.
 
-We can also see the PS inside the description of the chall. There was something in the sale_au_tresor, so I decided to create a symlink from mystere.txt to the salle_au_tresor.
+We can also see the PS inside the description of the chall. There was something in the `sale_au_tresor`, so I decided to create a symlink from `mystere.txt` to the salle_au_tresor.
+
+> we have seen that this function will display the content of suprise.txt after unzip mystere.txt so creating simlink from sall_au_tresor to surprise.txt will help us to read the contents of the file salle_au_tresor.
+{: .prompt-tip}
+
 By using the commands below we will get the base64 file and ready for exploiting
 ![PS_cache_cahe](https://github.com/CongKhaiNGUYEN/CTF/assets/61443497/67161fe4-719e-4340-a471-d50909b44951)
 
