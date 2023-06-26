@@ -17,9 +17,71 @@ We can download the zip file [tour-de-magie.zip](https://github.com/CongKhaiNGUY
 
 After unzipping the downloaded file, it appears that the files provided are intended for running WebAssembly code. The main code is stored in the `main.c` file. To test the program, we can use the command `wasmtime main.wasm` in the terminal. This command executes the WebAssembly module main.wasm using the wasmtime runtime environment. This way, we can run and observe the behavior of the WebAssembly program.
 
+> `WebAssembly` is a new type of code that can be run in modern web browsers — it is a low-level assembly-like language with a compact binary format that runs with near-native performance and provides languages such as `C/C++`,`C#` and `Rust` with a compilation target so that they can run on the web. It is also designed to run alongside `JavaScript`, allowing both to work together.
+{: .prompt-info}
+
 After analyzing the code, I realize that there is a simple Buffer Overflow (BOF) vulnerability. From this information, I can construct a payload to exploit the vulnerability and retrieve the flag.
 
-Based on the code in `main.c`, the payload can be constructed as follows:
+**main.c**
+
+```c
+#include<stdlib.h>
+#include<stdio.h>
+
+int main() {
+    int* check = malloc(sizeof(int));
+    *check = 0xcb0fcb0f;
+    puts("Alors, t'es un magicien ?");
+    char input[20];
+    fgets(input, 200, stdin);
+    
+	if(*check == 0xcb0fcb0f) {
+		puts("Apparemment non...");
+		exit(0);
+	}
+    if(*check != 0xcb0fcb0f && *check != 0x50bada55) {
+		puts("Pas mal, mais il en faut plus pour m'impressionner !");
+		exit(0);
+	}
+	if(*check == 0x50bada55) {
+		puts("Wow ! Respect ! Quelles paroles enchantantes ! Voilà ta récompense...");
+		FILE* f = fopen("flag.txt", "r");
+		if(f == NULL) {
+			puts("Erreur lors de l'ouverture du flag, contactez un administrateur !");
+			exit(1);
+		}
+		char c;
+		while((c = fgetc(f)) != -1) {
+			putchar(c);
+		}
+		fclose(f);
+	}
+}
+```
+
+From the source code, we can see that:
+
+The size of `input` is 20, but `fgets` permits an entry of 200 characters. Therefore, we can make a BOF (Buffer-Overflows) here. We see that `*check` is declared before `input`, so we exploit this BOF to overwrite the desired value to *check.
+
+## Create the payload:
+
+Our goal is to modify the value of `*check` to `0x50bada55` to get the flag.
+
+Since it takes 21 characters to generate a BOF, I will try the following
+
+![21A_wasm](https://github.com/CongKhaiNGUYEN/CTF/assets/61443497/64f64d6b-39bc-4b33-b9d7-ea357e29611a)
+
+It is clear that 21 is not enough for us to reach the value of *check. So we will keep adding A until we get the following result
+
+![23A_wasm](https://github.com/CongKhaiNGUYEN/CTF/assets/61443497/433bae79-951e-4722-87e5-5ad465b64d6a)
+
+Then replace the last 4 A's with the letter B and see the result
+
+![23A_B](https://github.com/CongKhaiNGUYEN/CTF/assets/61443497/43d1a4ca-4082-4ca6-bda5-5e0f06d62c17)
+
+Pay attention to the last line `42414141`, `42` is the ascii value of character `B` and `41` is for character `A`. It seems that the `17-20th` characters in the 23 characters string will overwrite the value of the variable *check.
+
+As a result, the payload can be constructed as follows:
 
 `payload = b'A' * 16 + b'\x55\xda\xba\x50' + b'AAA'`
 

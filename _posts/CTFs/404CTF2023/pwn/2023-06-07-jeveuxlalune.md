@@ -20,7 +20,18 @@ This command is using the grep command to search for a pattern in the file `info
 
 The `w` option is used to ensure that the search term matches only whole words, while the `i` option is used to make the search case-insensitive.
 
-Since this command uses regex, we can dump the entire content using the pattern `.* lune.txt &` to get the flag.
+Since this command uses regex, we can dump the entire content using the pattern `.* lune.txt &` to get the flag. Then the command will become
+
+`grep -wie ^.* lune.txt & informations.txt`
+
++ `^.*`, which means "any character(s) at the beginning of a line." This effectively matches the entire line.
+
++ `lune.txt`: This is the first file argument provided to grep. It specifies the file in which the search will be performed.
+
++ `&`: This symbol is a command separator that allows running multiple commands concurrently.
+
+Overall, this command will search for lines that match the pattern `^.*` (i.e., any line) in both `lune.txt` and `informations.txt`, using case-insensitive and whole-word matching. 
+
 
 ```bash
 En attendant j'ai aussi obtenu des informations sur Cherea, Caesonia, Scipion, Senectus, et Lepidus, de qui veux-tu que je te parle ?
